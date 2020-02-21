@@ -3,26 +3,47 @@
 This folder contains a test deployment of Nuvla that uses `emptyDir` K8s volume.
 
 NB! All the data stored by the persistence layer of Nuvla (Elasticsearch and
-Zookeeper) will be deleted as soon as at least one of the corresponding `Pod`,
-`ReplicaSet` or `Deployment` objects are deleted.
+Zookeeper) will be lost as soon as at least one of the corresponding `Pod`,
+`ReplicaSet` or `Deployment` objects is deleted.
 
 ## Quick deploy / terminate
 
 ***Deploy***
 
-Have a K8s cluster with the kubectl context pointing to it. 
+You must have a Kubernetes cluster with the `kubectl` context pointing to it. If
+you don't have one, referer to `k8s-cluster` folder at the root of the project
+to provision one.
 
 Run the following to deploy
 
     ./nuvla-deploy.sh
 
+The deployment in done into `nuvla-test` namespace. 
+
+Give the deployment ~3 minutes. Check if all the Pods are in Running state
+
+    $ kubectl -n nuvla-test get pod
+    NAME                                          READY   STATUS    RESTARTS   AGE
+    api-6499d4d4c-dx7tn                           1/1     Running   0          2m56s
+    es-5bb78547c4-bjpk7                           1/1     Running   0          2m57s
+    job-executor-69d96b9f4b-k9c27                 1/1     Running   0          2m56s
+    jobd-comp-image-state-7cb7bd74db-h6kht        1/1     Running   4          2m56s
+    jobd-deployment-state-7bdc9f77bc-c74qc        1/1     Running   4          2m56s
+    jobd-jobs-cleanup-6f66675549-xd4f2            1/1     Running   0          2m56s
+    jobd-srvc-image-state-7b5c4b5778-vgkgn        1/1     Running   4          2m56s
+    traefik-ingress-controller-5798b5646f-hgzp7   1/1     Running   0          2m54s
+    ui-584b85c6f6-d45jz                           1/1     Running   0          2m56s
+    zk-747cfcdb99-dls55                           1/1     Running   0          2m57s
+    $ 
+
+
 To get the port number on which the Nuvla is running on the deployed K8s cluster
 run the following
 
-    PORT=$(kubectl -n nuvla-test get service/traefik-ingress-service -o json | \
-       jq '.spec.ports[] | select(.name == "https") | .nodePort')
+    kubectl -n nuvla-test get service/traefik-ingress-service -o json | \
+       jq '.spec.ports[] | select(.name == "https") | .nodePort'
 
-After the deployment, the Nuvla service is running on `https://<k8s external ip>:$PORT`.
+After the deployment, the Nuvla service is running on `https://<k8s external ip>:<https ingress>`.
 
 ***Terminate***
 

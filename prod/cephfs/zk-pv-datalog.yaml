@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: zk-datalog
+  labels:
+    tier: db
+spec:
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 5Gi
+  csi:
+    driver: rook-ceph.cephfs.csi.ceph.com
+    nodeStageSecretRef:
+      # The secret should be pre-created.
+      # See https://gist.github.com/ShyamsundarR/f16d32e3edd5b38df50e90106674a943
+      name: rook-ceph-csi
+      namespace: nuvla
+    volumeAttributes:
+      clusterID: rook-ceph
+      fsName: nuvla
+      staticVolume: "true"
+      # Path of the PV on the CephFS filesystem. Must exist.
+      rootPath: /zk/datalog
+    # Can be anything, need not match PV name, or volumeName in PVC.
+    volumeHandle: cephfs-zk-datalog
+  volumeMode: Filesystem
+
+  # This forward reference is to block the PV and disallow unwanted claims.
+  claimRef:
+    # Name should match "claimName" in PVC claim section.
+    name: zk-datalog
+    namespace: nuvla

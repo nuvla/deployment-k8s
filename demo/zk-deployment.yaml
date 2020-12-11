@@ -1,0 +1,51 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: zk
+  labels:
+    app: nuvla
+spec:
+  ports:
+    - port: 2181
+      targetPort: 2181
+  selector:
+    app: zk
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zk
+  labels:
+    app: zk
+spec:
+  selector:
+    matchLabels:
+      app: zk
+  template:
+    metadata:
+      labels:
+        app: zk
+      annotations:
+        description: Zookeeper for Nuvla
+        tags: db
+    spec:
+      restartPolicy: Always
+      containers:
+        - name: zk
+          image: zookeeper:3.4
+          env:
+            - name: ZOO_MY_ID
+              value: "3"
+          ports:
+            - containerPort: 2181
+          volumeMounts:
+            - mountPath: /data
+              name: zkdata
+            - mountPath: /datalog
+              name: zkdatalog
+      volumes:
+        - name: zkdata
+          emptyDir: {}
+        - name: zkdatalog
+          emptyDir: {}

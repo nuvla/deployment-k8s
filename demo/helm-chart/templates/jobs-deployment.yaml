@@ -22,7 +22,7 @@ spec:
       restartPolicy: Always
       containers:
         - name: job-executor
-          image: nuvla/job:2.10.0
+          image: {{ .Values.job.image }}:{{ .Values.job.tag }}
           args:
             - --
             - /app/job_executor.py
@@ -53,7 +53,7 @@ spec:
       restartPolicy: Always
       containers:
         - name: jobd-jobs-cleanup
-          image: nuvla/job:2.10.0
+          image: {{ .Values.job.image }}:{{ .Values.job.tag }}
           command:
             - /app/job_distributor_jobs_cleanup.py
           args:
@@ -84,7 +84,7 @@ spec:
       restartPolicy: Always
       containers:
         - name: jobd-deployment-state
-          image: nuvla/job:2.10.0
+          image: {{ .Values.job.image }}:{{ .Values.job.tag }}
           command:
             - /app/job_distributor_deployment_state.py
           args:
@@ -116,7 +116,7 @@ spec:
       restartPolicy: Always
       containers:
         - name: jobd-deployment-state
-          image: nuvla/job:2.10.0
+          image: {{ .Values.job.image }}:{{ .Values.job.tag }}
           command:
             - /app/job_distributor_deployment_state.py
           args:
@@ -148,7 +148,7 @@ spec:
       restartPolicy: Always
       containers:
         - name: jobd-comp-image-state
-          image: nuvla/job:2.10.0
+          image: {{ .Values.job.image }}:{{ .Values.job.tag }}
           command:
             - /app/job_distributor_component_image_state.py
           args:
@@ -180,7 +180,7 @@ spec:
       restartPolicy: Always
       containers:
         - name: jobd-srvc-image-state
-          image: nuvla/job:2.10.0
+          image: {{ .Values.job.image }}:{{ .Values.job.tag }}
           command:
             - /app/job_distributor_service_image_state.py
           args:
@@ -212,7 +212,7 @@ spec:
       restartPolicy: Always
       containers:
         - name: jobd-nuvlabox-releases
-          image: nuvla/job:2.10.0
+          image: {{ .Values.job.image }}:{{ .Values.job.tag }}
           command:
             - /app/job_distributor_nuvlabox_releases.py
           args:
@@ -243,7 +243,7 @@ spec:
       restartPolicy: Always
       containers:
         - name: jobd-usage-report
-          image: nuvla/job:2.10.0
+          image: {{ .Values.job.image }}:{{ .Values.job.tag }}
           command:
             - /app/job_distributor_usage_report.py
           args:
@@ -274,7 +274,7 @@ spec:
       restartPolicy: Always
       containers:
         - name: jobd-vulnerabilities-database
-          image: nuvla/job:2.10.0
+          image: {{ .Values.job.image }}:{{ .Values.job.tag }}
           command:
             - /app/job_distributor_vulnerabilities_database.py
           args:

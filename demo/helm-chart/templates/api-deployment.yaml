@@ -39,8 +39,7 @@ spec:
       restartPolicy: Always
       containers:
         - name: api
-          # FIXME: nuvla/api:5.{6,7}.0 fail to add super user.
-          image: nuvladev/api:master
+          image: {{ .Values.api.image }}:{{ .Values.api.tag }}
           ports:
             - containerPort: 8200
           env:

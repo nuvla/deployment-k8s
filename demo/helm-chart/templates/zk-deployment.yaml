@@ -33,7 +33,7 @@ spec:
       restartPolicy: Always
       containers:
         - name: zk
-          image: zookeeper:3.4
+          image: {{ .Values.zk.image }}:{{ .Values.zk.tag }}
           env:
             - name: ZOO_MY_ID
               value: "3"

@@ -33,7 +33,7 @@ spec:
       restartPolicy: Always
       containers:
         - name: es
-          image: nuvla/es:7.7.0.0
+          image: {{ .Values.es.image }}:{{ .Values.es.tag }}
           env:
             - name: cluster.name
               value: elasticsearch

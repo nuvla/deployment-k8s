@@ -70,7 +70,7 @@ spec:
               - key: "traefik.toml"
                 path: "traefik.toml"
       containers:
-      - image: traefik:1.7-alpine
+      - image: {{ .Values.traefik.image }}:{{ .Values.traefik.tag }}
         name: traefik-ingress-lb
         volumeMounts:
           - mountPath: "/config"

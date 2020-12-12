@@ -35,6 +35,6 @@ spec:
       restartPolicy: Always
       containers:
         - name: ui
-          image: nuvla/ui:2.12.0
+          image: {{ .Values.ui.image }}:{{ .Values.ui.tag }}
           ports:
             - containerPort: 80

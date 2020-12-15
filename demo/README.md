@@ -17,7 +17,7 @@ helm install -n nuvla-demo --create-namespace nuvla-demo ./helm-chart
 Example of installation from releases
 
 ```
-helm install -n nuvla-demo --create-namespace nuvla-demo
+helm install -n nuvla-demo --create-namespace nuvla-demo \
     https://github.com/nuvla/deployment-k8s/releases/download/v0.0.1/nuvla-demo-0.0.1.tgz
 ```
 

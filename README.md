@@ -51,7 +51,7 @@ scripts. When modifying a file, keep the style of the existing code.
 
 ## Copyright
 
-Copyright &copy; 2020, SixSq Sàrl
+Copyright &copy; 2021, SixSq SA
 
 ## License
 

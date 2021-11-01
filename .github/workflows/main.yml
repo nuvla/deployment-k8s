@@ -13,9 +13,6 @@ jobs:
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
 
-      - name: rename pom.xml to let SonarCloud GHA Scan to run
-        run: mv pom.xml{,.moved}
-
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
@@ -63,8 +60,8 @@ jobs:
       - name: Install kubectl
         uses: azure/setup-kubectl@v1
         with:
-          version: '1.19.5-00'
-        id: install
+          version: 'v1.19.5'
+        id: install-kubectl
 
       - name: Deploy Kubernetes test cluster
         env:
@@ -79,15 +76,18 @@ jobs:
         uses: azure/setup-helm@v1
         with:
           version: 'v3.6.3'
-        id: install
+        id: install-helm
 
       - name: Deploy Nuvla
         env:
+          KUBECONFIG: $(pwd)/k8s-cluster/kubeconfig.yaml
           WAIT_AVAIL_MIN: 5
         run: |
           cd test
           helm install -n nuvla --create-namespace nuvla .
+          sleep 60
           NUVLA_ENDPOINT=$(get-nuvla-endpoint.sh)
+          echo NUVLA_ENDPOINT=$NUVLA_ENDPOINT
           ./wait-avail.sh ${NUVLA_ENDPOINT}/api/cloud-entry-point $WAIT_AVAIL_MIN || { >&2 echo "failed to provision Nuvla."; cd ../k8s-cluster/; ./cluster-deploy-exoscale.sh terminate; exit 1; }
 
       - name: Run Nuvla functional tests

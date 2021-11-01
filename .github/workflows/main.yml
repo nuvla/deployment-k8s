@@ -80,7 +80,7 @@ jobs:
 
       - name: Deploy Nuvla
         env:
-          KUBECONFIG: $(pwd)/k8s-cluster/kubeconfig.yaml
+          KUBECONFIG: ${GITHUB_WORKSPACE}/k8s-cluster/kubeconfig.yaml
           WAIT_AVAIL_MIN: 5
         run: |
           cd test

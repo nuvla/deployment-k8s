@@ -14,7 +14,7 @@ jobs:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
 
       - name: Set KUBECONFIG
-        run: echo "KUBECONFIG=${{ GITHUB_WORKSPACE }}/k8s-cluster/kubeconfig.yaml" >> $GITHUB_ENV
+        run: echo "KUBECONFIG=${{ env.GITHUB_WORKSPACE }}/k8s-cluster/kubeconfig.yaml" >> $GITHUB_ENV
 
       - name: Deploy Nuvla
         env:

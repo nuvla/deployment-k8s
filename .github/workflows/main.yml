@@ -91,7 +91,7 @@ jobs:
           sleep 60
           NUVLA_ENDPOINT=$(./get-nuvla-endpoint.sh)
           echo NUVLA_ENDPOINT=$NUVLA_ENDPOINT
-          ./wait-avail.sh ${NUVLA_ENDPOINT}/api/cloud-entry-point $WAIT_AVAIL_MIN || { >&2 echo "failed to provision Nuvla."; cd ../k8s-cluster/; ./cluster-deploy-exoscale.sh terminate; exit 1; }
+          ./wait-avail.sh ${NUVLA_ENDPOINT}/api/cloud-entry-point $WAIT_AVAIL_MIN
 
       - name: Run Nuvla functional tests
         run: |

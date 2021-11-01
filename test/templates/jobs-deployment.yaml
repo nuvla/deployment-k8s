@@ -1,0 +1,64 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: job-executor
+  labels:
+    app: nuvla
+    tier: backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: job-executor
+  template:
+    metadata:
+      labels:
+        app: job-executor
+      annotations:
+        description: Nuvla job executor
+        tags: job
+    spec:
+      restartPolicy: Always
+      containers:
+        - name: job-executor
+          image: {{ .Values.job.image }}:{{ .Values.job.tag }}
+          args:
+            - --
+            - /app/job_executor.py
+            - --api-url=http://api:8200
+            - --api-insecure
+            - --api-authn-header=group/nuvla-admin
+            - --zk-hosts={{ .Values.zk_endpoints }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: job-distributor
+  labels:
+    app: nuvla
+    tier: backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jobd-distributor
+  template:
+    metadata:
+      labels:
+        app: jobd-distributor
+      annotations:
+        description: Nuvla jobs distributor
+        tags: job
+    spec:
+      restartPolicy: Always
+      containers:
+        - name: jobd-distributor
+          image: {{ .Values.job.image }}:{{ .Values.job.tag }}
+          command:
+            - /app/job_distributor.py
+          args:
+            - --api-url=http://api:8200
+            - --api-insecure
+            - --api-authn-header=group/nuvla-admin
+            - --zk-hosts={{ .Values.zk_endpoints }}

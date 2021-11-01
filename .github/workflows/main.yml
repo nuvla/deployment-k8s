@@ -80,9 +80,10 @@ jobs:
 
       - name: Deploy Nuvla
         env:
-          KUBECONFIG: ${GITHUB_WORKSPACE}/k8s-cluster/kubeconfig.yaml
+          KUBECONFIG: ${{ env.GITHUB_WORKSPACE }}/k8s-cluster/kubeconfig.yaml
           WAIT_AVAIL_MIN: 5
         run: |
+          echo KUBECONFIG=$KUBECONFIG
           cd test
           helm install -n nuvla --create-namespace nuvla .
           sleep 60

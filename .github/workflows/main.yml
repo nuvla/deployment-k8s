@@ -80,11 +80,14 @@ jobs:
 
       - name: Deploy Nuvla
         env:
+          KUBECONFIG: $(pwd)/k8s-cluster/kubeconfig.yaml
           WAIT_AVAIL_MIN: 5
         run: |
           cd test
           helm install -n nuvla --create-namespace nuvla .
+          sleep 60
           NUVLA_ENDPOINT=$(get-nuvla-endpoint.sh)
+          echo NUVLA_ENDPOINT=$NUVLA_ENDPOINT
           ./wait-avail.sh ${NUVLA_ENDPOINT}/api/cloud-entry-point $WAIT_AVAIL_MIN || { >&2 echo "failed to provision Nuvla."; cd ../k8s-cluster/; ./cluster-deploy-exoscale.sh terminate; exit 1; }
 
       - name: Run Nuvla functional tests

@@ -1,16 +1,26 @@
 #!/bin/bash
-set -xe
 
-source ./env.sh
+set -xe
+set -o errtrace
+
+function cleanup() {
+  echo "Running cleanup..."
+  $DM_BIN rm -y "$($DM_BIN ls -q)"
+  echo "Running cleanup... done."
+}
+
+trap cleanup ERR
 
 action_err_msg="Action required: deploy|terminate"
 ACTION=${1:?$action_err_msg}
-SWARM_NODE_COUNT=${2:-1}
-WORKER_VM_PROFILE=${3:-'Small'}
+WORKERS_COUNT=${2:-1}
+WORKER_VM_PROFILE=${3:-'Medium'}
 WORKER_DISK_SIZE=${4:-100}
 IMG_NAME=${5:-'Linux Ubuntu 18.04 LTS 64-bit'}
 
-MASTER_VM_PROFILE=Small
+KUBERNETES_VER=1.19.5-00
+
+MASTER_VM_PROFILE=Medium
 
 DM_VER=v0.16.2
 DM_BIN=$HOME/docker-machine
@@ -48,7 +58,7 @@ deploy_master() {
         --exoscale-image "$IMG_NAME" "$MNAME"
     ip=$($DM_BIN ip "$MNAME")
     $DM_BIN scp ./k8s-install.sh "$MNAME":~
-    $DM_BIN ssh "$MNAME" ./k8s-install.sh master
+    $DM_BIN ssh "$MNAME" ./k8s-install.sh master $KUBERNETES_VER
 }
 
 deploy_worker() {
@@ -60,18 +70,18 @@ deploy_worker() {
         --exoscale-disk-size "$WORKER_DISK_SIZE" \
         --exoscale-image "$IMG_NAME" "$WNAME"
     $DM_BIN scp ./k8s-install.sh "$WNAME":~
-    $DM_BIN ssh "$WNAME" ./k8s-install.sh worker
+    $DM_BIN ssh "$WNAME" ./k8s-install.sh worker $KUBERNETES_VER
     $DM_BIN ssh "$WNAME" "sudo $joinToken"
 }
 
 deploy() {
-    swarm_node_count=${1:-1}
+    workers_count=${1:-1}
 
     deploy_master
 
-    if [ "$swarm_node_count" -ge 1 ]; then
+    if [ "$workers_count" -ge 1 ]; then
         joinToken=$($DM_BIN ssh "$MNAME" "kubeadm token create --print-join-command" | tr -d '\r')
-        for i in $(seq 1 $swarm_node_count); do
+        for i in $(seq 1 $workers_count); do
             WNAME=${BNAME}-worker${i}
             deploy_worker $WNAME "$joinToken" &
         done
@@ -82,8 +92,8 @@ deploy() {
 
     $DM_BIN ssh "$MNAME" kubectl get nodes
 
-    config=$(pwd)/config.$BNAME
-	echo ::: Copy admin config to $config
+    config=$(pwd)/kubeconfig.yaml
+    echo ::: Copy admin config to $config
     $DM_BIN scp $MNAME:~/.kube/config $config
 }
 
@@ -101,7 +111,7 @@ terminate() {
 }
 
 if [ "$ACTION" == "deploy" ]; then
-    deploy "$SWARM_NODE_COUNT"
+    deploy "$WORKERS_COUNT"
 elif [ "$ACTION" == "terminate" ]; then
     terminate
 else

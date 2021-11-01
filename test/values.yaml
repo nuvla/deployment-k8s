@@ -1,0 +1,30 @@
+es:
+  image: nuvla/es
+  tag: 7.11.1.0
+
+zk:
+  image: zookeeper
+  tag: 3.4
+
+# Comma separated list of Zookeeper endpoints.
+zk_endpoints: zk:2181
+
+api:
+  image: nuvladev/api
+  tag: master
+  # Comma separated list of Elasticsearch endpoints.
+  es_endpoints: es
+  # Super user password.
+  super_password: "supeR8-supeR8"
+
+ui:
+  image: nuvladev/ui
+  tag: master
+
+job:
+  image: nuvladev/job
+  tag: master
+
+traefik:
+  image: traefik
+  tag: 1.7-alpine

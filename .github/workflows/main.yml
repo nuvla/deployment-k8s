@@ -104,13 +104,13 @@ jobs:
           eval $($HOME/docker-machine env $mname --shell bash)
           lein do clean, test
 
-      - name: Terminate Kubernetes test cluster
-        if: ${{ always() }}
-        env:
-          BUILD_DIR: .
-          EXOSCALE_API_KEY: ${{ secrets.EXOSCALE_API_KEY }}
-          EXOSCALE_API_SECRET: ${{ secrets.EXOSCALE_API_SECRET }}
-        run: $BUILD_DIR/k8s-cluster/cluster-deploy-exoscale.sh terminate
+#      - name: Terminate Kubernetes test cluster
+#        if: ${{ always() }}
+#        env:
+#          BUILD_DIR: .
+#          EXOSCALE_API_KEY: ${{ secrets.EXOSCALE_API_KEY }}
+#          EXOSCALE_API_SECRET: ${{ secrets.EXOSCALE_API_SECRET }}
+#        run: $BUILD_DIR/k8s-cluster/cluster-deploy-exoscale.sh terminate
 
   job-notify:
     if: always()

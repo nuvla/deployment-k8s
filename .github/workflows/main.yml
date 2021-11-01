@@ -86,6 +86,7 @@ jobs:
           WAIT_AVAIL_MIN: 5
         run: |
           echo kubeconfig=${{ env.KUBECONFIG }}
+          cat ${{ env.KUBECONFIG }}
           cd test
           helm install --kubeconfig=${{ env.KUBECONFIG }} -n nuvla --create-namespace nuvla .
           sleep 60

@@ -78,9 +78,12 @@ jobs:
           version: 'v3.6.3'
         id: install-helm
 
+      - name: Set WORKSPACE_PATH
+        run: echo ::set-env name=WORKSPACE_PATH::$GITHUB_WORKSPACE
+
       - name: Deploy Nuvla
         env:
-          KUBECONFIG: ${{ env.GITHUB_WORKSPACE }}/k8s-cluster/kubeconfig.yaml
+          KUBECONFIG: ${{ env.WORKSPACE_PATH }}/k8s-cluster/kubeconfig.yaml
           WAIT_AVAIL_MIN: 5
         run: |
           echo KUBECONFIG=$KUBECONFIG

@@ -60,7 +60,7 @@ jobs:
       - name: Install kubectl
         uses: azure/setup-kubectl@v1
         with:
-          version: '1.19.5-00'
+          version: 'v1.19.5-00'
         id: install-kubectl
 
       - name: Deploy Kubernetes test cluster

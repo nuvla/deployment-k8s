@@ -98,8 +98,10 @@ jobs:
           export EXAMPLES_ROOT=${HOME}
           export NUVLA_INSECURE=TRUE
           export NUVLA_HOST=$(../test/get-nuvla-endpoint.sh | sed -e 's|http.*/||')
-          export DOCKER_HOST=${NUVLA_HOST//:*/}
           export SSH_PUBLIC_KEY=$HOME/.ssh/id_rsa.pub
+          export mname=$(cat $HOME/docker-machine-master)
+          eval $($HOME/docker-machine env $mname --shell bash)
+          export DOCKER_HOST=${NUVLA_HOST//:*/}
           env | sort
           lein do clean, test
 

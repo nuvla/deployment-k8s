@@ -11,8 +11,6 @@ spec:
       targetPort: 8200
   selector:
     app: api
-#    tier: backend
-#    phase: demo
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -29,9 +27,6 @@ spec:
     metadata:
       labels:
         app: api
-        # check if works with Service selectors
-        tier: backend
-        phase: demo
       annotations:
         description: Nuvla API service
         tags: api
@@ -44,12 +39,12 @@ spec:
             - containerPort: 8200
           env:
             - name: ES_ENDPOINTS
-              value: es
+              value: {{ .Values.api.es_endpoints }}
             - name: SNIFF_INTERVAL
               value: "5000"
             - name: SNIFF_AFTER_FAILURE_DELAY
               value: "1000"
             - name: ZK_ENDPOINTS
-              value: zk:2181
+              value: {{ .Values.zk_endpoints }}
             - name: NUVLA_SUPER_PASSWORD
-              value: "supeR8-supeR8"
+              value: {{ .Values.api.super_password }}

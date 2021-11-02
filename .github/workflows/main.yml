@@ -62,7 +62,7 @@ jobs:
           version: 'v1.19.5'
         id: install-kubectl
 
-      - name: Deploy Kubernetes test cluster
+      - name: Deploy test cluster
         env:
           WORKERS_NUMBER: 1
           EXOSCALE_API_KEY: ${{ secrets.EXOSCALE_API_KEY }}
@@ -91,15 +91,6 @@ jobs:
           NUVLA_ENDPOINT=$(./get-nuvla-endpoint.sh)
           echo NUVLA_ENDPOINT=$NUVLA_ENDPOINT
           ./wait-avail.sh ${NUVLA_ENDPOINT}/api/cloud-entry-point $WAIT_AVAIL_MIN
-
-      - name: Deploy Docker swarm testing cluster
-        env:
-          SWARM_SIZE: 0
-          EXOSCALE_API_KEY: ${{ secrets.EXOSCALE_API_KEY }}
-          EXOSCALE_API_SECRET: ${{ secrets.EXOSCALE_API_SECRET }}
-        run: |
-          cd test
-          ./swarm-deploy.sh deploy $SWARM_SIZE || { >&2 echo "failed to provision Docker swarm test cluster"; ./swarm-deploy.sh terminate; exit 1; }
 
       - name: Run Nuvla functional tests
         run: |

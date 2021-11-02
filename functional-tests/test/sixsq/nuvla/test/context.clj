@@ -6,7 +6,7 @@
 
 
 ;; silence the request/response debugging
-; (kvlt/quiet!)
+(kvlt/quiet!)
 
 
 (def nuvla-username (env :nuvla-username "super"))

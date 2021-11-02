@@ -57,6 +57,7 @@ deploy_master() {
     $DM_BIN $CREATE_CMD --exoscale-instance-profile $MASTER_VM_PROFILE \
         --exoscale-image "$IMG_NAME" "$MNAME"
     ip=$($DM_BIN ip "$MNAME")
+    $DM_BIN ssh "$MNAME" "sudo docker swarm init --force-new-cluster --advertise-addr $ip"
     $DM_BIN scp ./k8s-install.sh "$MNAME":~
     $DM_BIN ssh "$MNAME" ./k8s-install.sh master $KUBERNETES_VER
 }
@@ -64,14 +65,18 @@ deploy_master() {
 deploy_worker() {
     local WNAME=$1
     shift
-    local joinToken=$@
+    local joinTokenK8s=$@
     echo "::: Provisioning worker: $WNAME"
     $DM_BIN $CREATE_CMD --exoscale-instance-profile $WORKER_VM_PROFILE \
         --exoscale-disk-size "$WORKER_DISK_SIZE" \
         --exoscale-image "$IMG_NAME" "$WNAME"
     $DM_BIN scp ./k8s-install.sh "$WNAME":~
     $DM_BIN ssh "$WNAME" ./k8s-install.sh worker $KUBERNETES_VER
-    $DM_BIN ssh "$WNAME" "sudo $joinToken"
+    $DM_BIN ssh "$WNAME" "sudo $joinTokenK8s"
+
+    ip=$($DM_BIN ip "$MNAME")
+    joinTokenDocker=$($DM_BIN ssh "$MNAME" "sudo docker swarm join-token worker -q" | tr -d '\r')
+    $DM_BIN ssh "$WNAME" "sudo docker swarm join --token ${joinTokenDocker} ${ip}:2377"
 }
 
 deploy() {
@@ -80,14 +85,15 @@ deploy() {
     deploy_master
 
     if [ "$workers_count" -ge 1 ]; then
-        joinToken=$($DM_BIN ssh "$MNAME" "kubeadm token create --print-join-command" | tr -d '\r')
+        joinTokenK8s=$($DM_BIN ssh "$MNAME" "kubeadm token create --print-join-command" | tr -d '\r')
         for i in $(seq 1 $workers_count); do
             WNAME=${BNAME}-worker${i}
-            deploy_worker $WNAME "$joinToken" &
+            deploy_worker $WNAME "$joinTokenK8s" &
         done
         wait
     fi
 
+    ip=$($DM_BIN ip "$MNAME")
     echo "k8s master: $ip"
 
     $DM_BIN ssh "$MNAME" kubectl get nodes
@@ -95,6 +101,9 @@ deploy() {
     config=$(pwd)/kubeconfig.yaml
     echo ::: Copy admin config to $config
     $DM_BIN scp $MNAME:~/.kube/config $config
+
+    echo "$ip" > "$HOME"/nuvla-test-host
+    echo "$MNAME" > "$HOME"/docker-machine-master
 }
 
 terminate() {

@@ -1,15 +1,18 @@
-# FIXME: nuvla/api:5.{6,7}.0 fail to add super user.
 api:
-  image: nuvladev/api
-  tag: master
+  image: nuvla/api
+  tag: 5.18.0
+  # Comma separated list of Elasticsearch endpoints.
+  es_endpoints: es
+  # Super user password.
+  super_password: "supeR8-supeR8"
 
 ui:
   image: nuvla/ui
-  tag: 2.12.0
+  tag: 2.26.0
 
 job:
   image: nuvla/job
-  tag: 2.10.0
+  tag: 2.18.0
 
 zk:
   image: zookeeper
@@ -17,7 +20,10 @@ zk:
 
 es:
   image: nuvla/es
-  tag: 7.7.0.0
+  tag: 7.11.1.0
+
+# Comma separated list of Zookeeper endpoints.
+zk_endpoints: zk:2181
 
 traefik:
   image: traefik

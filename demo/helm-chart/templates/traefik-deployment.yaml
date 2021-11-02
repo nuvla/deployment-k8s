@@ -5,8 +5,8 @@ metadata:
   name: traefik-ingress-controller
   namespace: {{ .Release.Namespace }}
 ---
-kind: Service
 apiVersion: v1
+kind: Service
 metadata:
   name: traefik-ingress-service
 spec:
@@ -41,8 +41,8 @@ data:
       address = ":443"
         [entryPoints.https.tls]
 ---
-kind: Deployment
 apiVersion: apps/v1
+kind: Deployment
 metadata:
   name: traefik-ingress-controller
   labels:
@@ -70,8 +70,8 @@ spec:
               - key: "traefik.toml"
                 path: "traefik.toml"
       containers:
-      - image: {{ .Values.traefik.image }}:{{ .Values.traefik.tag }}
-        name: traefik-ingress-lb
+      - name: traefik-ingress-lb
+        image: {{ .Values.traefik.image }}:{{ .Values.traefik.tag }}
         volumeMounts:
           - mountPath: "/config"
             name: "config"

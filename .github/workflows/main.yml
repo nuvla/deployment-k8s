@@ -53,9 +53,8 @@ jobs:
           git clone https://github.com/nuvla/example-rstudio.git ${HOME}/example-rstudio
           git clone https://github.com/nuvla/example-jupyter.git ${HOME}/example-jupyter
           git clone https://github.com/nuvla/example-app.git ${HOME}/example-app
-
           pip install nuvla-api
-          python -c 'import nuvla.api;'
+          python -c 'import nuvla.api'
 
       - name: Install kubectl
         uses: azure/setup-kubectl@v1
@@ -63,7 +62,7 @@ jobs:
           version: 'v1.19.5'
         id: install-kubectl
 
-      - name: Deploy Kubernetes test cluster
+      - name: Deploy test cluster
         env:
           WORKERS_NUMBER: 1
           EXOSCALE_API_KEY: ${{ secrets.EXOSCALE_API_KEY }}
@@ -78,30 +77,41 @@ jobs:
           version: 'v3.6.3'
         id: install-helm
 
+      - name: Set KUBECONFIG
+        run: echo "KUBECONFIG=${{ github.workspace }}/k8s-cluster/kubeconfig.yaml" >> $GITHUB_ENV
+
       - name: Deploy Nuvla
         env:
-          KUBECONFIG: $(pwd)/k8s-cluster/kubeconfig.yaml
           WAIT_AVAIL_MIN: 5
         run: |
+          echo kubeconfig=${{ env.KUBECONFIG }}
           cd test
-          helm install -n nuvla --create-namespace nuvla .
+          helm install --kubeconfig=${{ env.KUBECONFIG }} -n nuvla --create-namespace nuvla .
           sleep 60
-          NUVLA_ENDPOINT=$(get-nuvla-endpoint.sh)
+          NUVLA_ENDPOINT=$(./get-nuvla-endpoint.sh)
           echo NUVLA_ENDPOINT=$NUVLA_ENDPOINT
-          ./wait-avail.sh ${NUVLA_ENDPOINT}/api/cloud-entry-point $WAIT_AVAIL_MIN || { >&2 echo "failed to provision Nuvla."; cd ../k8s-cluster/; ./cluster-deploy-exoscale.sh terminate; exit 1; }
+          ./wait-avail.sh ${NUVLA_ENDPOINT}/api/cloud-entry-point $WAIT_AVAIL_MIN
 
       - name: Run Nuvla functional tests
         run: |
           cd functional-tests
           export EXAMPLES_ROOT=${HOME}
           export NUVLA_INSECURE=TRUE
-          export NUVLA_HOST=$(cat $HOME/nuvla-test-host)
+          export NUVLA_HOST=$(../test/get-nuvla-endpoint.sh | sed -e 's|http.*/||')
           export SSH_PUBLIC_KEY=$HOME/.ssh/id_rsa.pub
           export mname=$(cat $HOME/docker-machine-master)
           eval $($HOME/docker-machine env $mname --shell bash)
-          lein do clean, test
+          export DOCKER_HOST=${NUVLA_HOST//:*/}
+          env | sort
+          lein test2junit
 
-      - name: Terminate Kubernetes test cluster
+      - name: Publish Unit Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v1
+        if: always()
+        with:
+          files: functional-tests/test2junit/xml/*.xml
+
+      - name: Terminate K8s test cluster
         if: ${{ always() }}
         env:
           BUILD_DIR: .

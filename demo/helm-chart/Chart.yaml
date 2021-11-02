@@ -3,4 +3,4 @@ name: nuvla-demo
 description: A Helm chart for Kubernetes to deploy Nuvla demo version
 type: application
 version: 0.0.1
-appVersion: 2.2.12
+appVersion: 2.2.25

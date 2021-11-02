@@ -23,7 +23,7 @@
 
   ;; check that the correct variables are in the environment
   (let [docker-cert-path (env :docker-cert-path)
-        docker-host      (env :nuvla-host)]
+        docker-host      (env :docker-host)]
 
     (is docker-cert-path)
     (is docker-host)

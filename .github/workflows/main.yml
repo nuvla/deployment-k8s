@@ -105,6 +105,12 @@ jobs:
           env | sort
           lein do clean, test
 
+      - name: Publish Unit Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v1
+        if: always()
+        with:
+          files: test2junit/xml/*.xml
+
       - name: Terminate K8s test cluster
         if: ${{ always() }}
         env:

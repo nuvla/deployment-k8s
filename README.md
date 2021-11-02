@@ -1,5 +1,7 @@
 # Nuvla deployment on Kubernetes
 
+[![BUILD](https://github.com/nuvla/deployment-k8s/actions/workflows/main.yml/badge.svg)](https://github.com/nuvla/deployment-k8s/actions/workflows/main.yml)
+
 This repository contains the definitions for the deployment of the Nuvla
 platform on Kubernetes cluster.
 

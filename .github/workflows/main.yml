@@ -105,13 +105,13 @@ jobs:
           env | sort
           lein do clean, test
 
-#      - name: Terminate K8s test cluster
-#        if: ${{ always() }}
-#        env:
-#          BUILD_DIR: .
-#          EXOSCALE_API_KEY: ${{ secrets.EXOSCALE_API_KEY }}
-#          EXOSCALE_API_SECRET: ${{ secrets.EXOSCALE_API_SECRET }}
-#        run: $BUILD_DIR/k8s-cluster/cluster-deploy-exoscale.sh terminate
+      - name: Terminate K8s test cluster
+        if: ${{ always() }}
+        env:
+          BUILD_DIR: .
+          EXOSCALE_API_KEY: ${{ secrets.EXOSCALE_API_KEY }}
+          EXOSCALE_API_SECRET: ${{ secrets.EXOSCALE_API_SECRET }}
+        run: $BUILD_DIR/k8s-cluster/cluster-deploy-exoscale.sh terminate
 
   job-notify:
     if: always()

@@ -101,6 +101,7 @@ jobs:
           export SSH_PUBLIC_KEY=$HOME/.ssh/id_rsa.pub
           export mname=$(cat $HOME/docker-machine-master)
           eval $($HOME/docker-machine env $mname --shell bash)
+          env
           lein do clean, test
 
 #      - name: Terminate K8s test cluster

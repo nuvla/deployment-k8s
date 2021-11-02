@@ -103,7 +103,7 @@ jobs:
           eval $($HOME/docker-machine env $mname --shell bash)
           export DOCKER_HOST=${NUVLA_HOST//:*/}
           env | sort
-          lein do clean, test
+          lein test2junit
 
       - name: Publish Unit Test Results
         uses: EnricoMi/publish-unit-test-result-action@v1

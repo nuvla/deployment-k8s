@@ -29,5 +29,6 @@
    [clj-http]]
 
   :profiles {:provided {:dependencies [[org.clojure/clojure]]}
+             :dev {:plugins [[test2junit "1.4.2"]]}
              :test     {:source-paths   ["test"]
                         :resource-paths ["dev-resources"]}})

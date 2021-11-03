@@ -68,7 +68,7 @@ jobs:
           EXOSCALE_API_KEY: ${{ secrets.EXOSCALE_API_KEY }}
           EXOSCALE_API_SECRET: ${{ secrets.EXOSCALE_API_SECRET }}
         run: |
-          cd k8s-cluster
+          cd test/cluster
           ./cluster-deploy-exoscale.sh deploy $WORKERS_NUMBER
 
       - name: Install Helm
@@ -78,7 +78,7 @@ jobs:
         id: install-helm
 
       - name: Set KUBECONFIG
-        run: echo "KUBECONFIG=${{ github.workspace }}/k8s-cluster/kubeconfig.yaml" >> $GITHUB_ENV
+        run: echo "KUBECONFIG=${{ github.workspace }}/test/cluster/kubeconfig.yaml" >> $GITHUB_ENV
 
       - name: Deploy Nuvla
         env:
@@ -86,7 +86,8 @@ jobs:
         run: |
           echo kubeconfig=${{ env.KUBECONFIG }}
           cd test
-          helm install --kubeconfig=${{ env.KUBECONFIG }} -n nuvla --create-namespace nuvla .
+          helm repo add nuvla https://nuvla.github.io/deployment-k8s
+          helm install --kubeconfig=${{ env.KUBECONFIG }} --values values.yaml -n nuvla --create-namespace nuvla/nuvla-demo
           sleep 60
           NUVLA_ENDPOINT=$(./get-nuvla-endpoint.sh)
           echo NUVLA_ENDPOINT=$NUVLA_ENDPOINT
@@ -94,10 +95,10 @@ jobs:
 
       - name: Run Nuvla functional tests
         run: |
-          cd functional-tests
+          cd test/e2e-tests
           export EXAMPLES_ROOT=${HOME}
           export NUVLA_INSECURE=TRUE
-          export NUVLA_HOST=$(../test/get-nuvla-endpoint.sh | sed -e 's|http.*/||')
+          export NUVLA_HOST=$(../get-nuvla-endpoint.sh | sed -e 's|http.*/||')
           export SSH_PUBLIC_KEY=$HOME/.ssh/id_rsa.pub
           export mname=$(cat $HOME/docker-machine-master)
           eval $($HOME/docker-machine env $mname --shell bash)
@@ -109,15 +110,17 @@ jobs:
         uses: EnricoMi/publish-unit-test-result-action@v1
         if: always()
         with:
-          files: functional-tests/test2junit/xml/*.xml
+          files: test/e2e-tests/test2junit/xml/*.xml
 
-      - name: Terminate K8s test cluster
+      - name: Terminate test cluster
         if: ${{ always() }}
         env:
           BUILD_DIR: .
           EXOSCALE_API_KEY: ${{ secrets.EXOSCALE_API_KEY }}
           EXOSCALE_API_SECRET: ${{ secrets.EXOSCALE_API_SECRET }}
-        run: $BUILD_DIR/k8s-cluster/cluster-deploy-exoscale.sh terminate
+        run: |
+          cd test/cluster
+          ./cluster-deploy-exoscale.sh terminate
 
   job-notify:
     if: always()

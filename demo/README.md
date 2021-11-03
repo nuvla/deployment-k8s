@@ -12,13 +12,13 @@ Zookeeper) will be lost as soon as at least one of the corresponding `Pod`,
 
 Add Helm repo
 
-```
+```shell script
 helm repo add nuvla https://nuvla.github.io/deployment-k8s
 ```
 
 Deploy latest Nuvla demo version as `nuvla-demo` from the added `nuvla` Helm repository.
 
-```
+```shell script
 helm install -n nuvla-demo --create-namespace nuvla-demo nuvla/nuvla-demo
 ```
 
@@ -28,6 +28,14 @@ Alternatively, deploy from the chart available locally.
 
 `helm-chart/` contains the Helm chart to deploy Nuvla using:
 
-```
+```shell script
 helm install -n nuvla-demo --create-namespace nuvla-demo ./helm-chart 
+```
+
+### Uninstalling
+
+To uninstall the release, run
+
+```shell script
+helm uninstall -n nuvla-demo nuvla-demo
 ```

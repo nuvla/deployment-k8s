@@ -19,7 +19,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
-  job-build:
+  deploy-and-test:
+    name: Deploy and test
     needs:
       - sonarcloud
     runs-on: ubuntu-latest
@@ -106,6 +107,9 @@ jobs:
           env | sort
           lein test2junit
 
+      - name: Check unit test results
+        run: ls -l test/e2e-tests/test2junit/xml/
+
       - name: Publish Unit Test Results
         uses: EnricoMi/publish-unit-test-result-action@v1
         if: always()
@@ -122,11 +126,11 @@ jobs:
           cd test/cluster
           ./cluster-deploy-exoscale.sh terminate
 
-  job-notify:
+  notify:
     if: always()
     name: Post Workflow Status To Slack
     needs:
-      - job-build
+      - deploy-and-test
     runs-on: ubuntu-latest
     steps:
       - uses: Gamesight/slack-workflow-status@master

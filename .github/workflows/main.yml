@@ -1,4 +1,4 @@
-name: BUILD
+name: Deploy and test
 
 on:
   - workflow_dispatch
@@ -87,7 +87,7 @@ jobs:
           echo kubeconfig=${{ env.KUBECONFIG }}
           cd test
           helm repo add nuvla https://nuvla.github.io/deployment-k8s
-          helm install --kubeconfig=${{ env.KUBECONFIG }} --values values.yaml -n nuvla --create-namespace nuvla/nuvla-demo
+          helm install --kubeconfig=${{ env.KUBECONFIG }} --values values.yaml -n nuvla --create-namespace nuvla nuvla/nuvla-demo
           sleep 60
           NUVLA_ENDPOINT=$(./get-nuvla-endpoint.sh)
           echo NUVLA_ENDPOINT=$NUVLA_ENDPOINT

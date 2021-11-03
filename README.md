@@ -5,6 +5,11 @@
 This repository contains the definitions for the deployment of the Nuvla
 platform on Kubernetes cluster.
 
+ - [demo](https://github.com/nuvla/deployment-k8s/tree/master/demo): contains
+ deployment definitions for quick provisioning of Nuvla for demo or 
+ evaluation. The deployment uses the latest released components of Nuvla. 
+ Data is not persisted across restarts of the Nuvla DB layer.
+ 
  - [test](https://github.com/nuvla/deployment-k8s/tree/master/test): contains
  deployment definitions for quick provisioning of Nuvla for testing or
  evaluation. The deployment is done using latest Nuvla artifacts from the master

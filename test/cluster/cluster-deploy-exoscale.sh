@@ -14,13 +14,13 @@ trap cleanup ERR
 action_err_msg="Action required: deploy|terminate"
 ACTION=${1:?$action_err_msg}
 WORKERS_COUNT=${2:-1}
-WORKER_VM_PROFILE=${3:-'Medium'}
+WORKER_VM_PROFILE=${3:-'Large'}
 WORKER_DISK_SIZE=${4:-100}
 IMG_NAME=${5:-'Linux Ubuntu 18.04 LTS 64-bit'}
 
 KUBERNETES_VER=1.19.5-00
 
-MASTER_VM_PROFILE=Medium
+MASTER_VM_PROFILE=$WORKER_VM_PROFILE
 
 DM_VER=v0.16.2
 DM_BIN=$HOME/docker-machine

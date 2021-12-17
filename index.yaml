@@ -3,6 +3,16 @@ entries:
   nuvla-demo:
   - apiVersion: v2
     appVersion: 2.2.26
+    created: "2021-12-17T16:21:39.862623813Z"
+    description: A Helm chart for Kubernetes to deploy Nuvla demo version
+    digest: 278b640fddfb037e749d1f5389f398011dec182c3835106fe88c52d924dc4285
+    name: nuvla-demo
+    type: application
+    urls:
+    - https://github.com/nuvla/deployment-k8s/releases/download/nuvla-demo-0.0.4/nuvla-demo-0.0.4.tgz
+    version: 0.0.4
+  - apiVersion: v2
+    appVersion: 2.2.26
     created: "2021-12-17T07:57:55.22720638Z"
     description: A Helm chart for Kubernetes to deploy Nuvla demo version
     digest: 635f0dba58bcc6c6c9f8c2faa3dbc70d05c0f7724c8492c6c950aeb585656fb8
@@ -21,4 +31,4 @@ entries:
     urls:
     - https://github.com/nuvla/deployment-k8s/releases/download/nuvla-demo-0.0.2/nuvla-demo-0.0.2.tgz
     version: 0.0.2
-generated: "2021-12-17T07:57:55.22721368Z"
+generated: "2021-12-17T16:21:39.862638613Z"

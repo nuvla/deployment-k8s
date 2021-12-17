@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.4 (2021-12-17)
+
+### Changed
+- Updated to use Traefik >=2.5
+
 ## v0.0.3 (2021-12-17)
 
 ### Changed

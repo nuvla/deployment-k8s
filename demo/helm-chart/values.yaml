@@ -27,4 +27,4 @@ zk_endpoints: zk:2181
 
 traefik:
   image: traefik
-  tag: 1.7-alpine
+  tag: 2.5.5

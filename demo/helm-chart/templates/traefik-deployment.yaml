@@ -6,45 +6,35 @@ metadata:
   namespace: {{ .Release.Namespace }}
 ---
 apiVersion: v1
-kind: Service
-metadata:
-  name: traefik-ingress-service
-spec:
-  selector:
-    k8s-app: traefik-ingress-lb
-  type: NodePort
-  ports:
-    - protocol: TCP
-      port: 80
-      name: http
-    - protocol: TCP
-      port: 443
-      name: https
-    - protocol: TCP
-      port: 8080
-      name: admin
----
-apiVersion: v1
 kind: ConfigMap
 metadata:
   name: traefik-config
+  namespace: {{ .Release.Namespace }}
 data:
-  traefik.toml: |
-    defaultEntryPoints = ["http","https"]
-
-    [entryPoints]
-      [entryPoints.http]
-      address = ":80"
-        [entryPoints.http.redirect]
-          entryPoint = "https"
-      [entryPoints.https]
-      address = ":443"
-        [entryPoints.https.tls]
+  traefik.yaml: |
+    entryPoints:
+      http:
+        address: :80
+        http:
+          redirections:
+            entryPoint:
+              to: https
+              scheme: https
+      https:
+        address: :443
+    providers:
+      kubernetesIngress: {}
+    accessLog: {}
+    api:
+      dashboard: true
+      insecure: true
+      debug: true
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: traefik-ingress-controller
+  namespace: {{ .Release.Namespace }}
   labels:
     k8s-app: traefik-ingress-lb
 spec:
@@ -67,8 +57,8 @@ spec:
           configMap:
             name: traefik-config
             items:
-              - key: "traefik.toml"
-                path: "traefik.toml"
+              - key: "traefik.yaml"
+                path: "traefik.yaml"
       containers:
       - name: traefik-ingress-lb
         image: {{ .Values.traefik.image }}:{{ .Values.traefik.tag }}
@@ -84,10 +74,29 @@ spec:
         - name: admin
           containerPort: 8080
         args:
-        - --configFile=/config/traefik.toml
-        - --api=true
-        - --kubernetes
-        - --logLevel=DEBUG
-        - --defaultentrypoints=http,https
-        - --entrypoints=Name:https Address::443 TLS
-        - --entrypoints=Name:http Address::80
+        - --configFile=/config/traefik.yaml
+        - --entrypoints.http.address=:80
+        - --entrypoints.https.address=:443
+        - --entrypoints.https.http.tls
+        - --providers.kubernetesingress
+        - --log.level=DEBUG
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: traefik-ingress-service
+  namespace: {{ .Release.Namespace }}
+spec:
+  selector:
+    k8s-app: traefik-ingress-lb
+  type: NodePort
+  ports:
+    - protocol: TCP
+      port: 80
+      name: http
+    - protocol: TCP
+      port: 443
+      name: https
+    - protocol: TCP
+      port: 8080
+      name: admin

@@ -38,7 +38,3 @@ spec:
           image: {{ .Values.ui.image }}:{{ .Values.ui.tag }}
           ports:
             - containerPort: 80
-      volumes:
-        - name: ubisap-logo
-          configMap:
-            name: ubisap-logo

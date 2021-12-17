@@ -1,6 +1,6 @@
 api:
   image: nuvla/api
-  tag: 5.18.0
+  tag: 5.22.0
   # Comma separated list of Elasticsearch endpoints.
   es_endpoints: es
   # Super user password.
@@ -8,7 +8,7 @@ api:
 
 ui:
   image: nuvla/ui
-  tag: 2.26.0
+  tag: 2.26.2
 
 job:
   image: nuvla/job

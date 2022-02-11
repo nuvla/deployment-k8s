@@ -1,0 +1,3 @@
+zk:
+  image: zookeeper
+  tag: 3.4

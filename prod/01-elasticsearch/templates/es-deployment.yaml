@@ -1,0 +1,70 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: es
+  labels:
+    app: nuvla
+spec:
+  ports:
+    - port: 9200
+      targetPort: 9200
+  selector:
+    app: es
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: es
+  labels:
+    app: es
+spec:
+  selector:
+    matchLabels:
+      app: es
+  template:
+    metadata:
+      labels:
+        app: es
+      annotations:
+        description: Elasticsearch for Nuvla
+        tags: db
+    spec:
+      restartPolicy: Always
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: nuvla
+                    operator: In
+                    values:
+                      - es
+      containers:
+        - name: es
+          image: {{ .Values.es.image }}:{{ .Values.es.tag }}
+          resources:
+            requests:
+              cpu: "750m"
+              memory: "2Gi"
+            limits:
+              cpu: "1000m"
+              memory: "2.5Gi"
+          env:
+            - name: cluster.name
+              value: elasticsearch
+            - name: xpack.security.enabled
+              value: "false"
+            - name: discovery.type
+              value: single-node
+            - name: ES_JAVA_OPTS
+              value: "-Xms2g -Xmx2g"
+          ports:
+            - containerPort: 9200
+          volumeMounts:
+            - mountPath: /usr/share/elasticsearch/data
+              name: esdata-volume
+      volumes:
+        - name: esdata-volume
+          hostPath:
+            path: /nuvla/es

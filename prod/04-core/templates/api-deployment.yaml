@@ -1,0 +1,82 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: api
+  labels:
+    app: nuvla
+spec:
+  ports:
+    - port: 8200
+      targetPort: 8200
+  selector:
+    app: api
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api
+  labels:
+    app: nuvla
+spec:
+  replicas: {{ .Values.api.replicas }}
+  selector:
+    matchLabels:
+      app: api
+  template:
+    metadata:
+      labels:
+        app: api
+      annotations:
+        description: Nuvla API service
+        tags: api
+    spec:
+      restartPolicy: Always
+      containers:
+        - name: api
+          image: {{ .Values.api.image }}:{{ .Values.api.tag }}
+          imagePullPolicy: Always
+          resources:
+            requests:
+              cpu: "500m"
+              memory: "2Gi"
+            limits:
+              cpu: "750m"
+              memory: "2.5Gi"
+          ports:
+            - containerPort: 8200
+          env:
+            - name: ES_ENDPOINTS
+              value: {{ .Values.es_endpoints }}
+            - name: ES_SNIFFER_INIT
+              value: {{ .Values.api.env.ES_SNIFFER_INIT }}
+            - name: SNIFF_INTERVAL
+              value: "5000"
+            - name: SNIFF_AFTER_FAILURE_DELAY
+              value: "1000"
+            - name: ZK_ENDPOINTS
+              value: {{ .Values.zk_endpoints }}
+            - name: NUVLA_SUPER_PASSWORD
+              value: {{ .Values.api.super_password }}
+            - name: KAFKA_PRODUCER_INIT
+              value: {{ .Values.api.env.KAFKA_PRODUCER_INIT }}
+            - name: KAFKA_ENDPOINTS
+              value: {{ .Values.kafka_endpoints }}
+            - name: REMOTE_EO_API_TMPL_URL
+              value: {{ .Values.api.env.REMOTE_EO_API_TMPL_URL}}
+            - name: REMOTE_EO_S3_INFRA_SERVICE
+              value: {{ .Values.api.env.REMOTE_EO_S3_INFRA_SERVICE }}
+          volumeMounts:
+            - mountPath: /etc/nuvla/session/
+              readOnly: true
+              name: {{ .Values.session.secret_name }}
+            - mountPath: /opt/nuvla/server/resources/
+              readOnly: true
+              name: {{ .Values.logging.config_name }}
+      volumes:
+        - name: {{ .Values.session.secret_name }}
+          secret:
+            secretName: {{ .Values.session.secret_name }}
+        - name: {{ .Values.logging.config_name }}
+          configMap:
+            name: {{ .Values.logging.config_name }}

@@ -19,10 +19,10 @@ It's possible to use already existing deployments on Elasticsearch, Zookeeper,
 and Kafka. Hence, only step 4. from the list below is required to be run.
 Otherwise, flow the steps listed below:
 
-1. deploy Elasticsearch following instructions in `01-elasticsearch` folder
-2. deploy Zookeeper following instructions in `02-zookeeper` folder
-3. deploy Kafka following instructions in `03-kafka` folder
-4. deploy Nuvla service following instructions in `04-core` folder. The
+1. deploy Elasticsearch following instructions in [01-elasticsearch](01-elasticsearch) folder
+2. deploy Zookeeper following instructions in [02-zookeeper](02-zookeeper) folder
+3. deploy Kafka following instructions in [03-kafka](03-kafka) folder
+4. deploy Nuvla service following instructions in [04-core](04-core) folder. The
    configuration contains defaults for namespaces and port numbers of components
    from 1.-3. If you happened to change any of those or have your own from the
    services deployed elsewhere, collect and use them in the configuration of the

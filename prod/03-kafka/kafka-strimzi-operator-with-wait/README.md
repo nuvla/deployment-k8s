@@ -6,13 +6,13 @@ Helm chart for deployment of the Apache Kafka Strimzi Operator for Kubernetes.
 
 ## Package and upload
 
-```shell script
+```shell
 helm install -n kafka strimzi-kafka-operator strimzi/strimzi-kafka-operator
 ```
 
 Package.
 
-```shell script
+```shell
 helm package .
 ```
 
@@ -22,31 +22,23 @@ Upload the tarball to the Helm repo.
 
 Example:
 
-```shell script
+```shell
 curl -isv -u $USER:$SECRET https://<helm repo URL> --upload-file kafka-strimzi-opeartor-0.0.1.tgz
 ```
 
 ## Deployment
 
-### Namespace
-
-Create namespace
-
-```
-kubectl create ns nuvla-kafka
-```
-
 ### From local repo
 
 Install.
 
-```shell script
-helm install -n nuvla-kafka kafka-strimzi-operator .
+```shell
+helm install -n nuvla-kafka kafka-strimzi-operator --create-namespace .
 ```
 
 Uninstall.
 
-```shell script
+```shell
 helm uninstall -n nuvla-kafka kafka-strimzi-operator
 ```
 
@@ -54,18 +46,18 @@ helm uninstall -n nuvla-kafka kafka-strimzi-operator
 
 Add Helm repo.
 
-```shell script
+```shell
 helm repo add nuvla-helm https://<helm repo URL> --username $USER --password $SECRET 
 ```
 
 Fetch chart.
 
-```shell script
+```shell
 helm fetch nuvla-helm/kafka-strimzi-opeartor
 ```
 
 Install chart.
 
-```shell script
+```shell
 helm install -n nuvla-kafka kafka-strimzi-operator kafka-strimzi-opeartor-0.0.1.tgz
 ```

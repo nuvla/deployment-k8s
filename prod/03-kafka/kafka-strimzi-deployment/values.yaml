@@ -1,4 +1,14 @@
 kafka_wait_deployed: 240
-log_retention_ms: 900000
-max_message_bytes: 4194304
-auto_create_topics_enable: "true"
+kafka:
+  log_retention_ms: 900000
+  max_message_bytes: 4194304
+  auto_create_topics_enable: "true"
+  storage:
+    size: 20Gi
+    deleteClaim: false
+    class: longhorn
+zk:
+  storage:
+    size: 5Gi
+    deleteClaim: false
+    class: longhorn

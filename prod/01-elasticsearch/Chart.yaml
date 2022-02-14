@@ -2,5 +2,5 @@ apiVersion: v2
 name: elasticsearch
 description: A Helm chart to deploy Elasticsearch for Nuvla
 type: application
-version: 0.0.2
+version: 0.0.3
 appVersion: 7.11.1.0

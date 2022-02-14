@@ -1,3 +1,11 @@
 zk:
   image: zookeeper
   tag: 3.4
+  zoo_my_id: 1
+  # Persistent Volume Claims
+  pvc_data:
+    size: 5Gi
+    storageClass: longhorn
+  pvc_datalog:
+    size: 5Gi
+    storageClass: longhorn

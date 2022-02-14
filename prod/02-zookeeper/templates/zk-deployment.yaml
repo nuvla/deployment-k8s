@@ -9,6 +9,7 @@ spec:
   ports:
     - port: 2181
       targetPort: 2181
+      name: client
   selector:
     app: zk
 ---
@@ -36,7 +37,7 @@ spec:
           image: {{ .Values.zk.image }}:{{ .Values.zk.tag }}
           env:
             - name: ZOO_MY_ID
-              value: "3"
+              value: {{ .Values.zk.zoo_my_id | quote }}
           ports:
             - containerPort: 2181
           volumeMounts:
@@ -46,6 +47,8 @@ spec:
               name: zkdatalog
       volumes:
         - name: zkdata
-          emptyDir: {}
+          persistentVolumeClaim:
+            claimName: zkdata
         - name: zkdatalog
-          emptyDir: {}
+          persistentVolumeClaim:
+            claimName: zkdatalog

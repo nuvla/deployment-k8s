@@ -11,11 +11,11 @@ Edit values.yaml and run the following command to deploy Elasticsearch for Nuvla
 service
 
 ```
-helm install -n db --create-namespace db .
+helm install -n nuvla-es --create-namespace es .
 ```
 
 To delete the deployment, run
 
 ```
-helm uninstall -n db db 
+helm uninstall -n nuvla-es es 
 ```

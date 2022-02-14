@@ -1,8 +1,13 @@
 # Changelog
 
-## Changed
+## Unreleased
 
-## v1.0.0 (2021-04-16)
+### Added
 
-# New Features
-- Initial version of deployment scripts of the Nuvla service. 
+### Changed
+
+## [0.0.2] - 2022-02-04
+
+### Added 
+
+  - Initial version of deployment scripts. 

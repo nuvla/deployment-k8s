@@ -36,9 +36,15 @@ It's possible to omit deployment of Kafka if notifications service of Nuvla is
 not planned to be used.
 
 To achieve that
-1. skip deployment defined in `03-kafka`,
+1. skip deployment defined in [03-kafka](03-kafka),
 2. in [04-core/values.yaml](04-core/values.yaml) set 
    `KAFKA_PRODUCER_INIT` to `no`.
+
+### Persistence
+
+By default, deployments of Elasticsearch, Zookeeper, and Kafka use `longhorn` as
+storage class. The value can be updated in the corresponding `values.yaml` files
+of the deployments to match your environment.
  
 ## Capacity planning
 

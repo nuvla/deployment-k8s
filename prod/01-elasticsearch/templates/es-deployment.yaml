@@ -9,6 +9,7 @@ spec:
   ports:
     - port: 9200
       targetPort: 9200
+      name: http
   selector:
     app: es
 ---
@@ -31,15 +32,19 @@ spec:
         tags: db
     spec:
       restartPolicy: Always
-      affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-              - matchExpressions:
-                  - key: nuvla
-                    operator: In
-                    values:
-                      - es
+      securityContext:
+        fsGroup: 1000
+      initContainers:
+      - name: take-data-dir-ownership
+        image: alpine:3
+        command:
+          - chown
+          - -R
+          - 1000:1000
+          - /usr/share/elasticsearch/data
+        volumeMounts:
+          - name: es-data
+            mountPath: /usr/share/elasticsearch/data
       containers:
         - name: es
           image: {{ .Values.es.image }}:{{ .Values.es.tag }}
@@ -63,8 +68,8 @@ spec:
             - containerPort: 9200
           volumeMounts:
             - mountPath: /usr/share/elasticsearch/data
-              name: esdata-volume
+              name: es-data
       volumes:
-        - name: esdata-volume
-          hostPath:
-            path: /nuvla/es
+        - name: es-data
+          persistentVolumeClaim:
+            claimName: es-data

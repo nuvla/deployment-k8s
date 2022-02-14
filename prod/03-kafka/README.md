@@ -6,8 +6,8 @@ the steps below.
 
 ## Deploy Operator
 
-Change directory to `kafka-strimzi-operator` and follow the instructions in
-`README.md`.
+Change directory to `kafka-strimzi-operator-with-wait` and follow the
+instructions in `README.md`.
 
 ## Deploy Kafka
 

@@ -16,7 +16,7 @@ Zookeeper) will be lost as soon as at least one of the corresponding `Pod`,
 This directory contains the Helm chart to deploy Zookeeper using:
 
 ```
-helm install -n db --create-namespace db .
+helm install -n nuvla-zk --create-namespace zk .
 ```
 
 To delete the deployment run

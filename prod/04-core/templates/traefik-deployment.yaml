@@ -12,7 +12,7 @@ metadata:
 spec:
   selector:
     k8s-app: traefik-ingress-lb
-  type: NodePort
+  type: {{ .Values.traefik.service_type }}
   ports:
     - protocol: TCP
       port: 80

@@ -34,6 +34,8 @@ job:
 traefik:
   image: traefik
   tag: 1.7-alpine
+  # Service type to expose Nuvla on the cluster (LoadBalancer or NodePort).
+  service_type: LoadBalancer
 
 session:
   secret_name: session-secrets

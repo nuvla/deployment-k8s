@@ -32,9 +32,19 @@ token must be set in the `secrets/ui-config.json` under `mapbox-access-token` ke
 Set the logo URL in `secrets/ui-config.json` under `nuvla-logo-url` to the URL
 of the Portal.
 
+### Ingress
+
+[Traefik](https://traefik.io/) is used as the Ingress controller for exposing
+Nuvla service and resource routing. The deployment is exposed through the
+service of type LoadBalancer. If you can not use LoadBalancer service on the
+cloud of your choice (via Kubernetes Cloud Controller Manager), you can
+update `traefik.service_type` in `values.yaml` to the NodePort.
+
 ### Deployment with Helm
 
-This directory contains the Helm chart to deploy Nuvla service using
+This directory contains the Helm chart to deploy Nuvla service.
+
+To deploy Nuvla service, edit values.yaml and then run
 
 ```shell script
 helm install -n nuvla-core --create-namespace nuvla .

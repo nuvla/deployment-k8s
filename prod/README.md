@@ -16,8 +16,9 @@ Also, this repository contains instructions on how to deploy Elasticsearch, Zook
 Kafka, and use their endpoints as parameters for deployment of Nuvla service.
 
 It's possible to use already existing deployments on Elasticsearch, Zookeeper,
-and Kafka. Hence, only step 4. from the list below is required to be run.
-Otherwise, flow the steps listed below:
+and Kafka. If all or some of the listed services are already available on your 
+infrastructure, only step 4. from the list below is required to be run. Otherwise, 
+flow the steps is listed below:
 
 1. deploy Elasticsearch following instructions in [01-elasticsearch](01-elasticsearch) folder
 2. deploy Zookeeper following instructions in [02-zookeeper](02-zookeeper) folder

@@ -12,7 +12,7 @@ The core of Nuvla depends on three services:
 
 Those services must be made available before the Nuvla deployment can start.
 
-This repository contains instructions on how to deploy Elasticsearch, Zookeeper,
+Also, this repository contains instructions on how to deploy Elasticsearch, Zookeeper,
 Kafka, and use their endpoints as parameters for deployment of Nuvla service.
 
 It's possible to use already existing deployments on Elasticsearch, Zookeeper,

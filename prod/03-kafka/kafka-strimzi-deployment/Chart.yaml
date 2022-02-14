@@ -1,0 +1,6 @@
+apiVersion: v2
+name: kafka-strimzi-deployment
+description: A Helm chart for Kubernetes to deploy Apache Kafka
+type: application
+version: 0.0.3
+appVersion: 2.8.0

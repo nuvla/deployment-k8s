@@ -1,10 +1,12 @@
 api:
   image: nuvla/api
   tag: 5.22.0
-  # Comma separated list of Elasticsearch endpoints.
   es_endpoints: es
   # Super user password.
   super_password: "supeR8-supeR8"
+  env:
+    ES_SNIFFER_INIT: "no"
+    KAFKA_PRODUCER_INIT: "no"
 
 ui:
   image: nuvla/ui
@@ -22,7 +24,6 @@ es:
   image: nuvla/es
   tag: 7.11.1.0
 
-# Comma separated list of Zookeeper endpoints.
 zk_endpoints: zk:2181
 
 traefik:

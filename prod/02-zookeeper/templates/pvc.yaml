@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: zkdata
+  labels:
+    app: zkdata
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.zk.pvc_data.size }}
+  storageClassName: {{ .Values.zk.pvc_data.storageClass }}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: zkdatalog
+  labels:
+    app: zkdatalog
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.zk.pvc_datalog.size }}
+  storageClassName: {{ .Values.zk.pvc_datalog.storageClass }}

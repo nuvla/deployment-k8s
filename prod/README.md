@@ -15,10 +15,10 @@ Those services must be made available before the Nuvla deployment can start.
 Also, this repository contains instructions on how to deploy Elasticsearch, Zookeeper,
 Kafka, and use their endpoints as parameters for deployment of Nuvla service.
 
-It's possible to use already existing deployments on Elasticsearch, Zookeeper,
+It's possible to use already existing deployments of Elasticsearch, Zookeeper,
 and Kafka. If all or some of the listed services are already available on your 
 infrastructure, only step 4. from the list below is required to be run. Otherwise, 
-flow the steps is listed below:
+flow of the steps is listed below:
 
 1. deploy Elasticsearch following instructions in [01-elasticsearch](01-elasticsearch) folder
 2. deploy Zookeeper following instructions in [02-zookeeper](02-zookeeper) folder
@@ -27,7 +27,7 @@ flow the steps is listed below:
    configuration contains defaults for namespaces and port numbers of components
    from 1.-3. If you happened to change any of those or have your own from the
    services deployed elsewhere, collect and use them in the configuration of the
-   deployment of the core components of the Nuvla service.
+   deployment of the core components of the Nuvla service in `values.yaml` file.
 
 ## Deployment considerations
 
@@ -84,7 +84,7 @@ See [03-kafka/kafka-strimzi-deployment/templates/kafka-deployment.yaml](03-kafka
 
 ### Nuvla core
 
-**API server** 
+**API server**
 
 Nuvla API server is a stateless service. It's possible to run more than one instance
 of it by setting `api.replicas` in [04-core/values.yaml](04-core/values.yaml).

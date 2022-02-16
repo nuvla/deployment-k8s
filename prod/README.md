@@ -2,7 +2,9 @@
 
 This folder contains deployment of Nuvla service. 
 
-The deployment is done on Kubernetes cluster via Helm chart.
+The deployment is done on Kubernetes cluster via Helm chart. 
+
+The deployment was tested on Kubernetes 1.23.1.
 
 The core of Nuvla depends on three services: 
 

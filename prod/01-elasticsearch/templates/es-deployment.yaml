@@ -14,7 +14,7 @@ spec:
     app: es
 ---
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: es
   labels:
@@ -23,6 +23,8 @@ spec:
   selector:
     matchLabels:
       app: es
+  replicas: {{ .Values.es.replicas }}
+  serviceName: "es"
   template:
     metadata:
       labels:
@@ -69,7 +71,12 @@ spec:
           volumeMounts:
             - mountPath: /usr/share/elasticsearch/data
               name: es-data
-      volumes:
-        - name: es-data
-          persistentVolumeClaim:
-            claimName: es-data
+  volumeClaimTemplates:
+  - metadata:
+      name: es-data
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: {{ .Values.es.pvc.storageClass }}
+      resources:
+        requests:
+          storage: {{ .Values.es.pvc.size }}

@@ -1,6 +1,7 @@
 es:
   image: nuvla/es
   tag: 7.11.1.0
+  replicas: 1
   # Persistent Volume Claim
   pvc:
     size: 25Gi

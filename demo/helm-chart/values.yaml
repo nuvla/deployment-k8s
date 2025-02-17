@@ -1,6 +1,6 @@
 api:
   image: nuvla/api
-  tag: 5.22.0
+  tag: 6.14.0
   es_endpoints: es
   # Super user password.
   super_password: "supeR8-supeR8"
@@ -10,22 +10,22 @@ api:
 
 ui:
   image: nuvla/ui
-  tag: 2.26.2
+  tag: 2.45.0
 
 job:
   image: nuvla/job
-  tag: 2.18.0
+  tag: 4.10.0
 
 zk:
   image: zookeeper
-  tag: 3.4
+  tag: 3.4.14
 
 es:
   image: nuvla/es
-  tag: 7.11.1.0
+  tag: 8.11.3.0
 
 zk_endpoints: zk:2181
 
 traefik:
   image: traefik
-  tag: 2.5.5
+  tag: 3.3.3

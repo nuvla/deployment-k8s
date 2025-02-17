@@ -1,11 +1,5 @@
 ---
 apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: traefik-ingress-controller
-  namespace: {{ .Release.Namespace }}
----
-apiVersion: v1
 kind: ConfigMap
 metadata:
   name: traefik-config
@@ -13,22 +7,53 @@ metadata:
 data:
   traefik.yaml: |
     entryPoints:
-      http:
+      web:
         address: :80
         http:
           redirections:
             entryPoint:
-              to: https
+              to: websecure
               scheme: https
-      https:
-        address: :443
+      websecure:
+        address: ":443"
+        http:
+          middlewares:
+            traefik-compress:
+              compress:
     providers:
-      kubernetesIngress: {}
-    accessLog: {}
+      kubernetesIngress:
+        allowEmptyServices: true
+        namespaces:
+          - {{ .Release.Namespace }}
+      file:
+        filename: /config/dynamic.yaml
+    accessLog:
+      addInternals: true
+    log:
+      level: INFO
     api:
       dashboard: true
       insecure: true
       debug: true
+  dynamic.yaml: |
+    http:
+      routers:
+        catchall:
+          # attached only to web entryPoint
+          entryPoints:
+            - "websecure"
+          # catchall rule
+          rule: "PathPrefix(`/`)"
+          service: unavailable
+          tls: {}
+          # lowest possible priority
+          # evaluated when no other router is matched
+          priority: 1
+      services:
+        # Service that will always answer a 503 Service Unavailable response
+        unavailable:
+          loadBalancer:
+            servers: {}
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -59,12 +84,19 @@ spec:
             items:
               - key: "traefik.yaml"
                 path: "traefik.yaml"
+              - key: "dynamic.yaml"
+                path: "dynamic.yaml"
       containers:
       - name: traefik-ingress-lb
         image: {{ .Values.traefik.image }}:{{ .Values.traefik.tag }}
         volumeMounts:
-          - mountPath: "/config"
+          - mountPath: "/config/traefik.yaml"
             name: "config"
+            subPath: "traefik.yaml"
+            readOnly: true
+          - mountPath: "/config/dynamic.yaml"
+            name: "config"
+            subPath: "dynamic.yaml"
             readOnly: true
         ports:
         - name: http

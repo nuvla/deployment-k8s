@@ -2,35 +2,32 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: nuvla
+  namespace: {{ .Release.Namespace }}
   annotations:
-    kubernetes.io/ingress.class: "traefik"
-    traefik.ingress.kubernetes.io/router.entrypoints: http,https
+    traefik.ingress.kubernetes.io/router.entrypoints: web,websecure
+    traefik.ingress.kubernetes.io/router.tls: "true"
     ingress.kubernetes.io/custom-request-headers: "nuvla-authn-info:"
 spec:
-  defaultBackend:
-    service:
-      name: ui
-      port:
-        number: 80
+  ingressClassName: traefik
   rules:
     - http:
         paths:
           - path: /api
-            pathType: ImplementationSpecific
+            pathType: Prefix
             backend:
               service:
                 name: api
                 port:
                   number: 8200
           - path: /ui
-            pathType: ImplementationSpecific
+            pathType: Prefix
             backend:
               service:
                 name: ui
                 port:
                   number: 80
           - path: /
-            pathType: ImplementationSpecific
+            pathType: Prefix
             backend:
               service:
                 name: ui

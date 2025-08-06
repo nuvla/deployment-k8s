@@ -1,6 +1,6 @@
-## Deployment of DB and synchronisation services 
+# Deployment of Zookeeper for Nuvla service
 
-This folder contains deployment of DB and synchronisation services for Nuvla on
+This folder contains deployment of Zookeeper coordination service for Nuvla on
 Kubernetes.
 
 The deployment is done on Kubernetes cluster via Helm chart.
@@ -22,5 +22,5 @@ helm install -n nuvla-zk --create-namespace zk .
 To delete the deployment run
 
 ```
-helm uninstall -n db db 
+helm uninstall -n nuvla-zk zk
 ```

@@ -1,4 +1,4 @@
-# Test deployment of Nulva on Kubernetes
+# Test deployment of Nuvla on Kubernetes
 
 This folder contains a test deployment of Nuvla that uses `emptyDir` K8s volume.
 
@@ -29,5 +29,5 @@ helm install --values values.yaml -n nuvla-test --create-namespace nuvla-test nu
 To uninstall the release, run
 
 ```shell script
-helm uninstall -n nuvla-demo nuvla-demo
+helm uninstall -n nuvla-test nuvla-test
 ```

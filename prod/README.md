@@ -1,4 +1,4 @@
-## Deployment of Nuvla service on Kubernetes
+# Deployment of Nuvla service on Kubernetes
 
 This folder contains deployment of Nuvla service. 
 
@@ -86,7 +86,7 @@ See [03-kafka/kafka-strimzi-deployment/templates/kafka-deployment.yaml](03-kafka
 
 ### Nuvla core
 
-**API server**
+#### API server
 
 Nuvla API server is a stateless service. It's possible to run more than one instance
 of it by setting `api.replicas` in [04-core/values.yaml](04-core/values.yaml).
@@ -105,11 +105,11 @@ in [04-core/templates/api-deployment.yaml](04-core/templates/api-deployment.yaml
                memory: "2.5Gi"
 ```
 
-**Jobs service***
+#### Jobs service
 
 Nuvla internal jobs' service is a stateless service. It's possible to run more
 than one instance of it by setting `job.replicas_distributor`
-and `job.replicas_executor` in [04-core/values.yaml](04-core/values.yaml). The 
+and `job.replicas_executor` in [04-core/values.yaml](04-core/values.yaml). The
 default is 1 and 2 replicas correspondingly.
 
 The minimal requirements of a single instance are as follows and can be updated
@@ -125,10 +125,10 @@ in [04-core/templates/jobs-deployment.yaml](04-core/templates/jobs-deployment.ya
               memory: "200Mi"
 ```
 
-**UI service**
+#### UI service
 
 Nuvla UI service is a stateless service. It's possible to run more than one
-instance of it by setting `ui.replicas` [04-core/values.yaml](04-core/values.yaml). 
+instance of it by setting `ui.replicas` [04-core/values.yaml](04-core/values.yaml).
 The default is 1.
 
 The minimal requirements of a single instance are as follows and can be updated

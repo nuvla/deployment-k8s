@@ -11,7 +11,7 @@ NB! All the data stored by the persistence layer of Nuvla (Elasticsearch and
 Zookeeper) will be lost as soon as at least one of the corresponding `Pod`,
 `ReplicaSet` or `Deployment` objects gets deleted.
 
-### Deployment with Helm
+## Deployment with Helm
 
 This directory contains the Helm chart to deploy Zookeeper using:
 
